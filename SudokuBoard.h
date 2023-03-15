@@ -28,6 +28,12 @@ public:
     void initializeBoard(ifstream& fin);
     bool solveSudoku();
     void printSudoku();
+    void findEmpty();
+    void printConflict();
+    void setConflict();
+    int findLocation();
+    void file();
+
 };
 
 #endif
