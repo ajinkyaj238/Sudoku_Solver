@@ -1,18 +1,26 @@
-//
-// Created by Ajinkya Joshi on 3/15/23.
-//
+/**************************************************************************
+* Project 1 TEAM 2
+* author          :Ajinkya Joshi, Anthony Chamoun
+* Date            :March 15th, 2023
+* File name       :LockBox.cpp
+* Purpose         :SudokuBoard.h
+ **************************************************************************/
 
 #ifndef SUDOKUBOARD_H
 #define SUDOKUBOARD_H
 #include <iostream>
 #include <vector>
+#include <fstream>
 using namespace std;
+
+const int Blank = 0;
+const int SquareSize = 3;
 
 class SudokuBoard
 {
 private:
     int boardSize;              // Size of the sudoku board
-    int matrix<int> sdkMatrix;  // Sudoku matrix
+    matrix<int> sdkMatrix;  // Sudoku matrix
 
 public:
     SudokuBoard(int N = 9);     // Constructor
