@@ -1,13 +1,3 @@
-
-/**************************************************************************
-* Project 1 TEAM 2
-* author          :Ajinkya Joshi, Anthony Chamoun
-* Date            :March 15th, 2023
-* File name       :SudokuBoard.cpp
-* Purpose         :
- **************************************************************************/
-
-#include <fstream>
 #include <iostream>
 #include "SudokuBoard.h"
 
@@ -44,6 +34,7 @@ int main() {
 		// Print sudoku
 		cout << "\n***** NEW SUDOKU PUZZLE... ******" << endl;
 		sdk->printSudoku(); // print the board on the terminal
+		sdk->printConflict(); // conflicts before trying to solve
 
 
 
