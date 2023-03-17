@@ -12,75 +12,132 @@
 #include "SudokuBoard.h"
 #include <fstream>
 
-SudokuBoard::SudokuBoard(int N): boardSize(N)
+using namespace std;
+
+SudokuBoard::SudokuBoard(int N) : boardSize(N)
 {
-    // Resize conflict matricies
-    sdkMatrix.resize(N, N);
-    clearBoard();
+	// Resize conflict matricies
+	sdkMatrix.resize(N, N);
+	c_rows.resize(N, N);
+	c_cols.resize(N, N);
+	c_sqs.resize(N, N);
+	clearBoard();
+
 }
 
 
 void SudokuBoard::clearBoard()
 {
-    for(int row = 0; row< boardSize; row++)
-        for(int col =0; col < boardSize; col++)
-            sdkMatrix[row][col] = Blank;
+	// clears conflict matricies
+	count = 0;
+	for (int row = 0; row < boardSize; row++)
+		for (int col = 0; col < boardSize; col++) {
+			sdkMatrix[row][col] = Blank;
+			c_rows[row][col] = Blank;
+			c_cols[row][col] = Blank;
+			c_sqs[row][col] = Blank;
+		}
 }
 
 
 void SudokuBoard::initializeBoard(ifstream& fin)
 {
-    int digit;
-    char ch; // holds each value read from file
-    clearBoard(); // clear the board first
-    for (int i = 0; i < boardSize; i++)
-    {
-        for (int j = 0; j < boardSize; j++)
-        {
-            fin >> ch;
-            // If the read char is not Blank
-            if (ch != '.') {
-                digit = ch - '0';// Convert char to int
-                sdkMatrix[i][j] = digit;
-            }
-        }
-    }
+	int digit;
+	char ch; // holds each value read from file
+	clearBoard(); // clear the board first
+	for (int i = 0; i < boardSize; i++)
+	{
+		for (int j = 0; j < boardSize; j++)
+		{
+			fin >> ch;
+			// If the read char is not Blank
+			if (ch != '.') {
+				digit = ch - '0';// Convert char to int
+				sdkMatrix[i][j] = digit;
+			}
+		}
+	}
+}
+
+void SudokuBoard::file(const string& filename) {
+	ofstream ofs(filename);
+	streambuf* coutbuf = cout.rdbuf();
+	cout.rdbuf(ofs.rdbuf());
 }
 
 bool SudokuBoard::solveSudoku()
 {
-    //***** To be completed ************
-// returns true if solution found, otherwise, false
-    return false;
+	// need to figure out how backtracking works
+	count += 1;
+	int row = 0, col = 0;
+	findEmpty(row, col);
+	if (row == boardSize + 1 || col == boardSize + 1) {
+		return true;
+	}
+	else {
+		int l = findLocation(row, col);
+		for (int i = 0; i < boardSize; i++) {
+			if (c_rows[row][i] == 0 && c_cols[col][i] == 0 && c_sqs[l][i] == 0) {
+				sdkMatrix[row][col] = i + 1;
+				c_rows[row][i] = 1;
+				c_cols[col][i] = 1;
+				c_sqs[l][i] = 1;
+				break;
+			}
+			else if (c_rows[row][i] == 1 || c_cols[col][i] == 1 || c_sqs[l][i] == 1) {
+
+			}
+		}
+	}
+	if (count == 40) {
+		return false;
+	}
+	solveSudoku();
 }
+
 
 void SudokuBoard::printSudoku()
 {
-    for (int i = 1; i <= boardSize; i++)
-    {
-        if ((i - 1) % SquareSize == 0)
-        {
-            for (int j = 1; j <= boardSize + 1; j++)
-                cout << "---";
-            cout << endl;
-        }
-        for (int j = 1; j < boardSize + 1; j++)
-        {
-            if ((j - 1) % SquareSize == 0)
-                cout << "|";
-            if (sdkMatrix[i - 1][j - 1] != Blank)
-                cout << " " << sdkMatrix[i - 1][j - 1] << " ";
-            else
-                cout << " - ";
-        }
-        cout << "|";
-        cout << endl;
-    }
-    cout << " -";
-    for (int j = 1; j <= boardSize; j++)
-        cout << "---";
-    cout << "-";
-    cout << endl;
+	for (int i = 1; i <= boardSize; i++)
+	{
+		if ((i - 1) % SquareSize == 0)
+		{
+			for (int j = 1; j <= boardSize + 1; j++)
+				cout << "---";
+			cout << endl;
+		}
+		for (int j = 1; j < boardSize + 1; j++)
+		{
+			if ((j - 1) % SquareSize == 0)
+				cout << "|";
+			if (sdkMatrix[i - 1][j - 1] != Blank)
+				cout << " " << sdkMatrix[i - 1][j - 1] << " ";
+			else
+				cout << " - ";
+		}
+		cout << "|";
+		cout << endl;
+	}
+	cout << " -";
+	for (int j = 1; j <= boardSize - 1; j++)
+		cout << "---";
+	cout << "-";
+	cout << endl;
+}
+
+void SudokuBoard::findEmpty(int& row, int& col) {
+	// need to pass by reference ,, hoping this works ,, it does
+	for (int i = 0; i < boardSize; i++) {
+		for (int j = 0; j < boardSize; j++) {
+			if (sdkMatrix[i][j] == Blank) {
+				row = i;
+				col = j;
+				i = j = boardSize;
+				break;
+			}
+		}
+
+	}
 }
 
 
