@@ -82,3 +82,81 @@ void SudokuBoard::printSudoku()
     cout << "-";
     cout << endl;
 }
+
+
+
+void SudokuBoard::setConflict() {
+	// does exactly that
+	for (int i = 0; i < boardSize; i++) {
+		for (int j = 0; j < boardSize; j++) {
+			if (sdkMatrix[i][j] != 0) {
+				int k = sdkMatrix[i][j];
+				int a = findLocation(j, i);
+				c_rows[j][k - 1] = 1;
+				c_cols[i][k - 1] = 1;
+				c_sqs[a][k - 1] = 1;
+			}
+		}
+	}
+}
+
+void SudokuBoard::printConflict() {
+	cout << "square conflicts" << endl;
+	for (int i = 0; i < boardSize; i++) {
+		for (int j = 0; j < boardSize; j++) {
+			cout << c_sqs[i][j];
+		}
+		cout << endl;
+	}
+	cout << "col conflicts" << endl;
+	for (int i = 0; i < boardSize; i++) {
+		for (int j = 0; j < boardSize; j++) {
+			cout << c_cols[i][j];
+		}
+		cout << endl;
+	}
+	cout << "row conflicts" << endl;
+	for (int i = 0; i < boardSize; i++) {
+		for (int j = 0; j < boardSize; j++) {
+			cout << c_rows[i][j];
+		}
+		cout << endl;
+	}
+}
+
+// determines which square
+int SudokuBoard::findLocation(int row, int col) {
+	if (row + 1 <= boardSize / 3) {
+		if (col + 1 <= boardSize / 3) {
+			return 0;
+		}
+		else if (col + 1 <= 2 * (boardSize / 3)) {
+			return 3;
+		}
+		else if (col + 1 <= boardSize) {
+			return 6;
+		}
+	}
+	if (row + 1 <= 2 * (boardSize / 3)) {
+		if (col + 1 <= boardSize / 3) {
+			return 1;
+		}
+		else if (col + 1 <= 2 * (boardSize / 3)) {
+			return 4;
+		}
+		else if (col + 1 <= boardSize) {
+			return 7;
+		}
+	}
+	if (row + 1 <= boardSize) {
+		if (col + 1 <= boardSize / 3) {
+			return 2;
+		}
+		else if (col + 1 <= 2 * (boardSize / 3)) {
+			return 5;
+		}
+		else if (col + 1 <= boardSize) {
+			return 8;
+		}
+	}
+}
